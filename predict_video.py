@@ -407,8 +407,8 @@ if bounce == 1:
   # print("Vs: ", Vs)
   # print("X: ", X)
 
-  X.to_csv("X_save.csv", save_index=False)
-  X = X.fillna(value=np.nan)
+  # X.to_csv("X_save.csv", save_index=False)
+  # X = X.fillna(value=np.nan)
 
   # load the pre-trained classifier  
   clf = load(open('clf.pkl', 'rb'))
