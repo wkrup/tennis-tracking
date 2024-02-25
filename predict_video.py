@@ -14,12 +14,12 @@ import time
 from sktime.datatypes._panel._convert import from_2d_array_to_nested
 from court_detector import CourtDetector
 from Models.tracknet import trackNet
-from Models.TrackNet3 import TrackNet
+from Models.TrackNet import TrackNet
 from TrackPlayers.trackplayers import *
 from utils import get_video_properties, get_dtype
 from detection import *
 from pickle import load
-
+from catboost import CatBoostRegressor
 
 # parse parameters
 parser = argparse.ArgumentParser()
@@ -184,13 +184,16 @@ img = img.astype(np.float32)
 
 coords.append(None)
 coords.append(None)
+
+
 last = time.time()
 t.append(time.time()-last)
 t.append(time.time()-last)
 
-last = time.time()
+
+# last = time.time()
 while(True):
-
+    print(len(coords))
     img2 = img1
     img1 = img
 
@@ -237,7 +240,7 @@ while(True):
     heatmap = cv2.resize(pr  , (output_width, output_height ))
 
     #heatmap is converted into a binary image by threshold method.
-    ret,heatmap = cv2.threshold(heatmap,127,255,cv2.THRESH_BINARY)
+    ret,heatmap = cv2.threshold(heatmap,127 ,255,cv2.THRESH_BINARY)
 
     #find the circle in image with 2<=radius<=7
     circles = cv2.HoughCircles(heatmap, cv2.HOUGH_GRADIENT,dp=1,minDist=1,param1=50,param2=2,minRadius=2,maxRadius=7)
@@ -257,14 +260,23 @@ while(True):
 
             x = int(circles[0][0][0])
             y = int(circles[0][0][1])
-            print(currentFrame, x,y)
-            coords.append([x, y])
-            t.append(time.time()-last)
+            
+            if coords[-1] is not None and (abs(coords[-1][0] - x)>=20 or abs(coords[-1][1] - y)>=20):
+                #push None to queue
+                q.appendleft(None)
+                #pop x,y from queue
+                q.pop()
+                coords.append(None)
+                t.append(time.time()-last)
+            else: 
+                coords.append([x, y])
+                t.append(time.time()-last)
+                print(currentFrame, x,y)
 
-            #push x,y to queue
-            q.appendleft([x,y])   
-            #pop x,y from queue
-            q.pop()    
+                #push x,y to queue
+                q.appendleft([x,y])   
+                #pop x,y from queue
+                q.pop()     
         else:
             #push None to queue
             q.appendleft(None)
@@ -273,7 +285,7 @@ while(True):
             coords.append(None)
             t.append(time.time()-last)
     else:
-        #push None to queue
+      #push None to queue
         q.appendleft(None)
         #pop x,y from queue
         q.pop()
@@ -298,9 +310,15 @@ while(True):
     # next frame
     currentFrame += 1
 
+if len(frames) > len(coords):
+  coords.append(None)
+  t.append(time.time()-last)
+
 # everything is done, release the video
 video.release()
 output_video.release()
+
+
 
 if minimap == 1:
   game_video = cv2.VideoCapture(output_video_path)
@@ -371,7 +389,10 @@ xy = coords[:]
 
 if bounce == 1:
   # Predicting Bounces 
+
+
   test_df = pd.DataFrame({'x': [coord[0] for coord in xy[:-1]], 'y':[coord[1] for coord in xy[:-1]], 'V': V})
+
 
   # df.shift
   for i in range(20, 0, -1): 
@@ -381,7 +402,6 @@ if bounce == 1:
   for i in range(20, 0, -1): 
     test_df[f'lagV_{i}'] = test_df['V'].shift(i, fill_value=0)
 
-  test_df.drop(['x', 'y', 'V'], 1, inplace=True)
 
   Xs = test_df[['lagX_20', 'lagX_19', 'lagX_18', 'lagX_17', 'lagX_16',
         'lagX_15', 'lagX_14', 'lagX_13', 'lagX_12', 'lagX_11', 'lagX_10',
@@ -401,21 +421,58 @@ if bounce == 1:
         'lagV_4', 'lagV_3', 'lagV_2', 'lagV_1']]
   Vs = from_2d_array_to_nested(Vs.to_numpy())
 
-  X = pd.concat([Xs, Ys, Vs], 1)
-  # print("Xs: ", Xs)
-  # print("Ys: ", Ys)
-  # print("Vs: ", Vs)
-  # print("X: ", X)
+  Xs.rename(columns={0: 'xs'}, inplace=True)
+  Ys.rename(columns={0: 'ys'}, inplace=True)
+  Vs.rename(columns={0: 'Vs'}, inplace=True)
 
-  # X.to_csv("X_save.csv", save_index=False)
-  # X = X.fillna(value=np.nan)
+  X = pd.concat([Xs, Ys, Vs], axis=1)
 
-  # load the pre-trained classifier  
-  clf = load(open('clf.pkl', 'rb'))
 
-  predcted = clf.predict(X)
-  idx = list(np.where(predcted == 1)[0])
+  cb = CatBoostRegressor()
+  cb.load_model('cb_newdata_all') #Path to CatBoostRegressor model
+
+  
+  cb_result = cb.predict(test_df)
+  predcted = []
+
+  for i in range(len(cb_result)):
+    if cb_result[i] >= 0.05:
+      predcted.append(1)
+    else:
+      predcted.append(0)
+  print(np.array(predcted))
+
+  predcted = np.array(predcted)
+
+  predcted_new = predcted.copy()
+
+  ext_range = 0
+
+  for i in range(len(predcted)):
+    if predcted[i] == 1 and i > ext_range:
+      end_point = i+ext_range
+      if end_point > len(predcted):
+        end_point = len(predcted)
+      for j in range(i-ext_range, end_point):
+        predcted_new[j] = 1
+
+  idx = list(np.where(predcted_new == 1)[0])
   idx = np.array(idx) - 10
+
+  new_idx = []
+  for i in idx:
+    if i >= 0:
+      print(np.median(xy[i-5:i+5], axis=0))
+      if i >= 5:
+        ten_med = np.median(xy[i-5:i+5], axis=0)
+      else:
+        ten_med = np.mean(xy[:i+5], axis=0)
+      print(xy[i])
+      if abs(ten_med[0] - xy[i][0]) < 50 and abs(ten_med[1] - xy[i][1]) < 50:
+        new_idx.append(i)
+  idx = np.array(new_idx)
+
+  print(idx)
   
   if minimap == 1:
     video = cv2.VideoCapture('VideoOutput/video_with_map.mp4')
