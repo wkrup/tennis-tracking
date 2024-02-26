@@ -19,7 +19,10 @@ from TrackPlayers.trackplayers import *
 from utils import get_video_properties, get_dtype
 from detection import *
 from pickle import load
+
+####수정#######
 from catboost import CatBoostRegressor
+####수정#######
 
 # parse parameters
 parser = argparse.ArgumentParser()
@@ -261,6 +264,9 @@ while(True):
             x = int(circles[0][0][0])
             y = int(circles[0][0][1])
             
+
+
+            ####수정#######
             if coords[-1] is not None and (abs(coords[-1][0] - x)>=20 or abs(coords[-1][1] - y)>=20):
                 #push None to queue
                 q.appendleft(None)
@@ -284,6 +290,9 @@ while(True):
             q.pop()
             coords.append(None)
             t.append(time.time()-last)
+            ####수정#######
+
+
     else:
       #push None to queue
         q.appendleft(None)
@@ -310,9 +319,12 @@ while(True):
     # next frame
     currentFrame += 1
 
+####수정#######
 if len(frames) > len(coords):
   coords.append(None)
   t.append(time.time()-last)
+####수정#######
+  
 
 # everything is done, release the video
 video.release()
@@ -402,6 +414,7 @@ if bounce == 1:
   for i in range(20, 0, -1): 
     test_df[f'lagV_{i}'] = test_df['V'].shift(i, fill_value=0)
 
+  test_df.drop(['x', 'y', 'V'], 1, inplace=True)
 
   Xs = test_df[['lagX_20', 'lagX_19', 'lagX_18', 'lagX_17', 'lagX_16',
         'lagX_15', 'lagX_14', 'lagX_13', 'lagX_12', 'lagX_11', 'lagX_10',
@@ -428,8 +441,11 @@ if bounce == 1:
   X = pd.concat([Xs, Ys, Vs], axis=1)
 
 
+
+
+  ####수정#######
   cb = CatBoostRegressor()
-  cb.load_model('cb_newdata_all') #Path to CatBoostRegressor model
+  cb.load_model('../cb_newdata_all') #Path to CatBoostRegressor model
 
   
   cb_result = cb.predict(test_df)
@@ -473,6 +489,10 @@ if bounce == 1:
   idx = np.array(new_idx)
 
   print(idx)
+  ####수정#######
+
+
+  
   
   if minimap == 1:
     video = cv2.VideoCapture('VideoOutput/video_with_map.mp4')
