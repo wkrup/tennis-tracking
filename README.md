@@ -1,3 +1,13 @@
+# Part of code created for participation in Ambient AI Competition
+
+## My Contributions
+1. Modification of code to replace TrackNet with TrackNetV2
+2. Trained new bounce detection from new dataset created by teammates
+
+## Contributions from Teammates
+1. Modification of code from TrackNetV2
+2. Creation of new dataset from amateur tennis game video
+- - -
 <p align='center'>
   <a href="https://www.artlabs.tech"><img src='https://raw.githubusercontent.com/ArtLabss/tennis-tracking/main/VideoOutput/artlabs%20logo.jpg' width="150" height="170"></a>
 </p>
