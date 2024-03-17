@@ -3,6 +3,7 @@
 ## My Contributions
 1. Modification of code to replace TrackNet with TrackNetV2
 2. Trained new bounce detection from new dataset created by teammates
+3. Postprocessing for the removal of false positives in bounce detection
 
 ## Contributions from Teammates
 1. Modification of code from TrackNetV2
