@@ -1,12 +1,12 @@
 # Part of code created for participation in Ambient AI Competition
 
 ## My Contributions
-1. Modification of code to replace TrackNet with TrackNet that uses three consecutive frames as input
+1. Modification of code to replace TrackNet used by ArtLabss with TrackNet that uses three consecutive frames as input
 2. Trained new bounce detection from new dataset created by teammates
 3. Postprocessing for the removal of false positives in bounce detection
 
 ## Contributions from Teammates
-1. Modification of code from TrackNetV2
+1. Modification of original code from TrackNet (that uses three consecutive frames as input) 
 2. Creation of new dataset from amateur tennis game video
 - - -
 <p align='center'>
