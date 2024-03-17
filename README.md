@@ -1,7 +1,7 @@
 # Part of code created for participation in Ambient AI Competition
 
 ## My Contributions
-1. Modification of code to replace TrackNet with TrackNetV2
+1. Modification of code to replace TrackNet with TrackNet that uses three consecutive frames as input
 2. Trained new bounce detection from new dataset created by teammates
 3. Postprocessing for the removal of false positives in bounce detection
 
