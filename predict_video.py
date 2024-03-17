@@ -445,7 +445,7 @@ if bounce == 1:
 
   ####수정#######
   cb = CatBoostRegressor()
-  cb.load_model('../cb_newdata_all') #Path to CatBoostRegressor model
+  cb.load_model('cb_newdata_all') #Path to CatBoostRegressor model
 
   
   cb_result = cb.predict(test_df)
