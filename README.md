@@ -1,4 +1,5 @@
-# Part of code created for participation in Ambient AI Competition
+# SNU Ambient AI Competition (Partial)
+>Part of the code created for participation in the Ambient AI Competition hosted by SNU Graduate School of Data Science. This is the backup of part of the project code.
 
 ## My Contributions
 1. Modification of code to replace TrackNet used by ArtLabss with TrackNet that uses three consecutive frames as input
