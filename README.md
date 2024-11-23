@@ -10,13 +10,12 @@
 1. Modification of original code from TrackNet (that uses three consecutive frames as input) 
 2. Creation of new dataset from amateur tennis game video
 
-## References
-1. Huang, Y. C., Liao, I. N., Chen, C. H., İk, T. U., & Peng, W. C. (2019, September). Tracknet: A deep learning network for tracking high-speed and tiny objects in sports applications. In 2019 16th IEEE International Conference on Advanced Video and Signal Based Surveillance (AVSS) (pp. 1-8). IEEE.
-   
-https://nol.cs.nctu.edu.tw:234/open-source/TrackNet
+## 🖋 References
+- 1. Huang, Y. C., Liao, I. N., Chen, C. H., İk, T. U., & Peng, W. C. (2019, September). Tracknet: A deep learning network for tracking high-speed and tiny objects in sports applications. In 2019 16th IEEE International Conference on Advanced Video and Signal Based Surveillance (AVSS) (pp. 1-8). IEEE.
+   https://nol.cs.nctu.edu.tw:234/open-source/TrackNet
 
-2. https://github.com/yastrebksv/TennisProject
-3. original ArtLabss/tennis-tracking repository
+- 2. https://github.com/yastrebksv/TennisProject
+- 3. original ArtLabss/tennis-tracking repository
 - - -
 <p align='center'>
   <a href="https://www.artlabs.tech"><img src='https://raw.githubusercontent.com/ArtLabss/tennis-tracking/main/VideoOutput/artlabs%20logo.jpg' width="150" height="170"></a>
