@@ -1,12 +1,12 @@
 # SNU Ambient AI Competition (Partial)
 >Part of the code created for participation in the Ambient AI Competition hosted by SNU Graduate School of Data Science. This is the backup of part of the project code.
 
-## My Contributions
+## 📌 My Contributions
 1. Modification of code to replace TrackNet used by ArtLabss with TrackNet that uses three consecutive frames as input
 2. Trained new bounce detection from new dataset created by teammates
 3. Postprocessing for the removal of false positives in bounce detection
 
-## Contributions from Teammates
+## 📌 Contributions from Teammates
 1. Modification of original code from TrackNet (that uses three consecutive frames as input) 
 2. Creation of new dataset from amateur tennis game video
 
