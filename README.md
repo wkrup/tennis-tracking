@@ -2,13 +2,13 @@
 >Part of the code created for participation in the Ambient AI Competition hosted by SNU Graduate School of Data Science. This is the backup of part of the project code.
 
 ## 📌 My Contributions
-1. Modification of code to replace TrackNet used by ArtLabss with TrackNet that uses three consecutive frames as input
-2. Trained new bounce detection from new dataset created by teammates
-3. Postprocessing for the removal of false positives in bounce detection
+1. Modification of code to replace TrackNet used by ArtLabss with TrackNet that uses three consecutive frames as input.
+2. Trained new bounce detection model (CatBoostRegressor) from new dataset created by teammates.
+3. Postprocessing for the removal of false positives in bounce detection.
 
 ## 📌 Contributions from Teammates
-1. Modification of original code from TrackNet (that uses three consecutive frames as input) 
-2. Creation of new dataset from amateur tennis game video
+1. Modification of original code from TrackNet (that uses three consecutive frames as input).
+2. Creation of new dataset from amateur tennis game video.
 
 ## 🖋 References
 - Huang, Y. C., Liao, I. N., Chen, C. H., İk, T. U., & Peng, W. C. (2019, September). Tracknet: A deep learning network for tracking high-speed and tiny objects in sports applications. In 2019 16th IEEE International Conference on Advanced Video and Signal Based Surveillance (AVSS) (pp. 1-8). IEEE.
